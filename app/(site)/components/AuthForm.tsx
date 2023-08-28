@@ -52,6 +52,15 @@ export default function AuthForm() {
       axios
         .post("/api/register", data)
         .then(() => signIn("credentials", data))
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("Invalid credentials!");
+          }
+
+          if (callback?.ok) {
+            router.push("/conversations");
+          }
+        })
         .catch(() => {
           toast.error("Something went wrong");
         })
@@ -71,7 +80,7 @@ export default function AuthForm() {
           }
           if (callback?.ok && !callback?.error) {
             toast.success("Logged in successfully");
-            router.push("/users");
+            router.push("/conversations");
           }
         })
         .finally(() => {
@@ -89,6 +98,7 @@ export default function AuthForm() {
         }
         if (callback?.ok && !callback?.error) {
           toast.success("Logged in successfully");
+          router.push("/conversations");
         }
       })
       .finally(() => {
